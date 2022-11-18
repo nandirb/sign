@@ -29,6 +29,7 @@ export default function UploadScreen({ navigation }) {
       onLoading(true);
       const image = result?.assets[0];
       const res = await uploadReq(image);
+
       onLoading(false);
       navigation.navigate("Result", {
         isCamera: false,

@@ -6,9 +6,11 @@ export default function ResultScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri }} style={styles.imageWrapper} />
+      <View style={styles.imageWrapper}>
+        <Image source={{ uri }} style={styles.image} />
+      </View>
       <Text style={styles.description}>
-        {res?.length > 0 ? res : "Try again "}
+        {res?.length > 0 ? res[0]?.label : "Not detected"}
       </Text>
     </View>
   );
@@ -23,9 +25,8 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     borderRadius: 10,
-    width: Dimensions.get("screen").width - 100,
-    height: Dimensions.get("screen").width - 100,
-    backgroundColor: "#eee",
+    width: Dimensions.get("screen").width,
+    height: (Dimensions.get("screen").height / 3) * 2,
   },
   image: {
     height: "100%",
