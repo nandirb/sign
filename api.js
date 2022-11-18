@@ -1,29 +1,32 @@
 import axios from "axios";
-
-const APIKit = axios.create({
-  baseURL: "http://ec2-13-48-194-49.eu-north-1.compute.amazonaws.com:9000",
-  timeout: 15000,
-});
+import { Alert } from "react-native";
 
 export const uploadReq = async (image) => {
-  const formData = new FormData();
-  formData.append("file", {
+  const uriArray = image.uri.split(".");
+  const fileExtension = uriArray[uriArray.length - 1];
+  const fileTypeExtended = `${image.type}/${fileExtension}`;
+  const file = {
     uri: image.uri,
-    type: image.type,
-    size: image.fileSize,
     name: image.uri.substring(image.uri.lastIndexOf("/") + 1),
-  });
-
+    type: fileTypeExtended,
+  };
+  const formData = new FormData();
+  formData.append("file", file);
   try {
-    const result = await APIKit.post("/uploadImageAPI/", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    const resBody = result?.body?.data?.output;
+    const response = await axios.post(
+      "http://ec2-13-48-194-49.eu-north-1.compute.amazonaws.com:9000/uploadImageAPI/",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    const resBody = response?.data.output;
     return resBody;
   } catch (error) {
+    console.log(error);
+    Alert.alert(error.toString());
     return null;
   }
 };
